@@ -14,7 +14,7 @@ type Ranking struct{
 	RankingName string  `bson:"ranking_name" json:"ranking_name" validate:"oneof=required"`
 }
 
-type movie struct{
+type Movie struct{
 	ID bson.ObjectID `bson:"_id" json:"_id"`
 	ImdbID string `bson:"imdb_id" json:"imdb_id" validate:"required"`
 	Title string  `bson:"title" json:"title" validate:"required, min=2, max=500"`
