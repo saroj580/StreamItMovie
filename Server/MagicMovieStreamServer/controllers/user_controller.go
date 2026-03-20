@@ -9,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/saroj580/MagicMovie/Server/MagicMovieStreamServer/database"
 	"github.com/saroj580/MagicMovie/Server/MagicMovieStreamServer/models"
+	"github.com/saroj580/MagicMovie/Server/MagicMovieStreamServer/utils"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -106,5 +107,30 @@ func LoginUser() gin.HandlerFunc{
 			return
 		}
 
+		token, refreshToken, err := utils.GenerateTokens(foundUser.Email, foundUser.FirstName, foundUser.LastName, foundUser.UserID, foundUser.Role)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+			return
+		}
+
+		err = utils.UpdateAllTokens(foundUser.UserID, token, refreshToken)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, models.UserResponse{
+			UserId : foundUser.UserID,
+			FirstName: foundUser.FirstName,
+			LastName: foundUser.LastName,
+			Email: foundUser.Email,
+			Role: foundUser.Role,
+			Token: token,
+			RefreshToken: refreshToken,
+			FavouriteGenre: foundUser.FavouriteGenres,
+
+		})
 	}
 }

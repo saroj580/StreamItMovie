@@ -16,7 +16,7 @@ type SignedDetails struct{
 	FirstName string
 	LastName string
 	Role string
-	UserID string
+	UserId string
 	jwt.RegisteredClaims
 }
 
@@ -30,7 +30,7 @@ func GenerateTokens(email, firstName, lastName, role, userId string) (string, st
 		FirstName: firstName,
 		LastName: lastName,
 		Role: role,
-		UserID: userId,
+		UserId: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer: "MagicStream",
 			IssuedAt: jwt.NewNumericDate(time.Now()),
@@ -50,7 +50,7 @@ func GenerateTokens(email, firstName, lastName, role, userId string) (string, st
 		FirstName: firstName,
 		LastName: lastName,
 		Role: role,
-		UserID: userId,
+		UserId: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer: "MagicStream",
 			IssuedAt: jwt.NewNumericDate(time.Now()),
